@@ -25,7 +25,7 @@ cd diropen
 gcc -o diropen diropen.c
 sudo cp diropen /bin/
 ```
-To open just type diropen
+To run just type diropen
 ```bash
 diropen
 ```
