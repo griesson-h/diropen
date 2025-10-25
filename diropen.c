@@ -54,51 +54,51 @@ void ReadUserDir(char OpenedDir[20],char CurrentDir[30],DIR* dir,struct dirent* 
 }
 
 void CreateAFile(char CurrentDir[],char OpenedDir[]) {
-    char ufile[20];
-    char cmd2[30] = "touch ";
+    char File[20];
+    char Touch[30] = "touch ";
     printf("The name of the file: ");
-    scanf("%s", ufile);
-    strcat(cmd2, CurrentDir);
-    strcat(cmd2, "/");
-    strcat(cmd2, ufile);
-    printf("%s\n", cmd2);
-    system(cmd2);
+    scanf("%s", File);
+    strcat(Touch, CurrentDir);
+    strcat(Touch, "/");
+    strcat(Touch, File);
+    printf("%s\n", Touch);
+    system(Touch);
     ScanUserInput(CurrentDir,OpenedDir);
 }
 
 void nano(char CurrentDir[],char OpenedDir[]) {
-    char nanor[20];
-    char cmd3[30] = "nano ";
+    char File[20];
+    char nano[30] = "nano ";
     printf("File to open/create with nano: ");
-    scanf("%s", nanor);
-    strcat(cmd3, CurrentDir);
-    strcat(cmd3, "/");
-    strcat(cmd3, nanor);
-    system(cmd3);
+    scanf("%s", File);
+    strcat(nano, CurrentDir);
+    strcat(nano, "/");
+    strcat(nano, File);
+    system(nano);
     ScanUserInput(CurrentDir,OpenedDir);
 }
 
 void vim(char CurrentDir[],char OpenedDir[]) {
-    char vimr[20];
-    char cmd4[30] = "vim ";
+    char File[20];
+    char vim[30] = "vim ";
     printf("File to open/create with vim: ");
-    scanf("%s", vimr);
-    strcat(cmd4, CurrentDir);
-    strcat(cmd4, "/");
-    strcat(cmd4, vimr);
-    system(cmd4);
+    scanf("%s", File);
+    strcat(vim, CurrentDir);
+    strcat(vim, "/");
+    strcat(vim, File);
+    system(vim);
     ScanUserInput(CurrentDir,OpenedDir);
 }
 
 void Execute(char CurrentDir[],char OpenedDir[]) {
-    char uexe[20];
-    char cmd5[30] = "./";
+    char File[20];
+    char Execute[30] = "./";
     printf("File to execute: ");
-    scanf("%s", uexe);
-    strcat(cmd5, uexe);
-    strcat(cmd5, " > /dev/null & disown");
+    scanf("%s", File);
+    strcat(Execute, File);
+    strcat(Execute, " > /dev/null & disown");
     chdir(CurrentDir);
-    system(cmd5);
+    system(Execute);
     ScanUserInput(CurrentDir,OpenedDir);
 }
 
