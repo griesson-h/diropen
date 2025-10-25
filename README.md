@@ -31,7 +31,8 @@ diropen
 ```
 
 ## Usage
-To open a directory type the directory name (the name must not have spaces in it because I haven't fixed this yet)
+To open a directory type the directory name (the name must not have spaces in it because I haven't fixed this yet).
+You can open a specific directory using command line argument
 
 To execute a file type &exe&
 
