@@ -4,7 +4,7 @@ a silly CLI file manager for linux
 ## Note
 This is my very first project and it was not made for real use
 
-## To Install
+## Installation
 Install git via your package manager
 ```bash
 sudo pacman -S git # for arch-based linux distribution
