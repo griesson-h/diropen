@@ -10,6 +10,11 @@
 #include <string.h>
 #include <unistd.h>
 
+char CurrentDir[30] = "/";
+char OpenedDir[20];
+DIR *dir;
+struct dirent *entry;
+
 void ReadDir(DIR* dir,struct dirent* entry) {
     while ((entry = readdir(dir)) != NULL) {
         printf("%s\n", entry->d_name);
@@ -17,11 +22,15 @@ void ReadDir(DIR* dir,struct dirent* entry) {
 }
 
 void ScanUserInput(char CurrentDir[30],char OpenedDir[20]) {
-    printf("%s/", CurrentDir);
+    if (strcmp(CurrentDir, "/") == 0) {
+        printf("%s", CurrentDir);
+    } else {
+        printf("%s/", CurrentDir);
+    }
     scanf("%s", OpenedDir);
 }
 
-void ClearCurrentUserDir(char CurrentDir[30],char OpenedDir[20]) {
+void ClearCurrentDir(char CurrentDir[30],char OpenedDir[20]) {
     int x = strlen(CurrentDir)-strlen(OpenedDir)-1;
     while (x != strlen(CurrentDir)) {
         CurrentDir[x] = '\0';
@@ -37,17 +46,17 @@ void ClearPreviousDir(char CurrentDir[30]) {
 
 void ReadUserDir(char OpenedDir[20],char CurrentDir[30],DIR* dir,struct dirent* entry) {
     if (strcmp(OpenedDir, ".") == 0 || strcmp(OpenedDir, "/") == 0)  {
-        ClearCurrentUserDir(CurrentDir,OpenedDir);
+        ClearCurrentDir(CurrentDir,OpenedDir);
     }
 
     if (strcmp(OpenedDir, "..") == 0) {
-        ClearCurrentUserDir(CurrentDir,OpenedDir);
+        ClearCurrentDir(CurrentDir,OpenedDir);
         ClearPreviousDir(CurrentDir);
     }
 
     if (dir == NULL) {
         printf("ERROR: Not able to access the directory, sorry\n");
-        ClearCurrentUserDir(CurrentDir,OpenedDir);
+        ClearCurrentDir(CurrentDir,OpenedDir);
     } else {
         ReadDir(dir,entry);
     }
@@ -96,19 +105,22 @@ void Execute(char CurrentDir[],char OpenedDir[]) {
     printf("File to execute: ");
     scanf("%s", File);
     strcat(Execute, File);
-    strcat(Execute, "> /dev/null & disown");
+    strcat(Execute, " > /dev/null & disown");
     chdir(CurrentDir);
     system(Execute);
     ScanUserInput(CurrentDir,OpenedDir);
 }
 
 // THE MAIN function
-int main () {
-    char CurrentDir[30] = "/home";
-    char OpenedDir[20];
-    DIR *dir;
-    struct dirent *entry;
-    dir = opendir("/home");
+int main (int argc, char* argv[]) {
+    if (argc > 2) {
+        printf("ERROR: Too many arguments\n");
+        return -1;
+    }
+    if (argv[1] != NULL) {
+        strcpy(CurrentDir,argv[1]);
+    }
+    dir = opendir(CurrentDir);
 
     ReadDir(dir,entry);
 
@@ -128,7 +140,9 @@ int main () {
         Execute(CurrentDir,OpenedDir);
     }
 
-    strcat(CurrentDir, "/");
+    if (strcmp(CurrentDir, "/") != 0) {
+        strcat(CurrentDir, "/");
+    }
     strcat(CurrentDir, OpenedDir);
 
     dir = opendir(CurrentDir);
