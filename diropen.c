@@ -96,7 +96,7 @@ void Execute(char CurrentDir[],char OpenedDir[]) {
     printf("File to execute: ");
     scanf("%s", File);
     strcat(Execute, File);
-    strcat(Execute, "&");
+    strcat(Execute, "> /dev/null & disown");
     chdir(CurrentDir);
     system(Execute);
     ScanUserInput(CurrentDir,OpenedDir);
