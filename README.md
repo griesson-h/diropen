@@ -19,7 +19,7 @@ To install you can use Makefile
 cd diropen
 make
 ```
-or you can do that manually
+or manually
 ```bash
 cd diropen
 gcc -o diropen diropen.c
