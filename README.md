@@ -37,7 +37,7 @@ To execute a file type &exe&
 
 To create an empty file type &createafile&
 
-To open/create a file via nano type &nano& (be sure you have it intalled)
+To open/create a file via nano type &nano& (be sure you have it installed)
 
-To open/create a file via vim type &vim& (be sure you have it intalled)
+To open/create a file via vim type &vim& (be sure you have it installed)
 
