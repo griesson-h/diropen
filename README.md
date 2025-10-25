@@ -1,2 +1,2 @@
 # diropen
-a silly CLI file manager
+a silly CLI file manager for linux
