@@ -15,13 +15,13 @@ char OpenedDir[20];
 DIR *dir;
 struct dirent *entry;
 
-void ReadDir(DIR* dir,struct dirent* entry) {
+void ReadDir() {
     while ((entry = readdir(dir)) != NULL) {
         printf("%s\n", entry->d_name);
     }
 }
 
-void ScanUserInput(char CurrentDir[30],char OpenedDir[20]) {
+void ScanUserInput() {
     if (strcmp(CurrentDir, "/") == 0) {
         printf("%s", CurrentDir);
     } else {
@@ -30,39 +30,39 @@ void ScanUserInput(char CurrentDir[30],char OpenedDir[20]) {
     scanf("%s", OpenedDir);
 }
 
-void ClearCurrentDir(char CurrentDir[30],char OpenedDir[20]) {
+void ClearCurrentDir() {
     int x = strlen(CurrentDir)-strlen(OpenedDir)-1;
     while (x != strlen(CurrentDir)) {
         CurrentDir[x] = '\0';
     }
 }
 
-void ClearPreviousDir(char CurrentDir[30]) {
+void ClearPreviousDir() {
     for (int x = strlen(CurrentDir);CurrentDir[x] != '/'; x -= 1) {
         CurrentDir[x] = '\0';
     }
     CurrentDir[strlen(CurrentDir)-1] = '\0';
 }
 
-void ReadUserDir(char OpenedDir[20],char CurrentDir[30],DIR* dir,struct dirent* entry) {
+void ReadUserDir() {
     if (strcmp(OpenedDir, ".") == 0 || strcmp(OpenedDir, "/") == 0)  {
-        ClearCurrentDir(CurrentDir,OpenedDir);
+        ClearCurrentDir();
     }
 
     if (strcmp(OpenedDir, "..") == 0) {
-        ClearCurrentDir(CurrentDir,OpenedDir);
-        ClearPreviousDir(CurrentDir);
+        ClearCurrentDir();
+        ClearPreviousDir();
     }
 
     if (dir == NULL) {
         printf("ERROR: Not able to access the directory, sorry\n");
-        ClearCurrentDir(CurrentDir,OpenedDir);
+        ClearCurrentDir();
     } else {
-        ReadDir(dir,entry);
+        ReadDir();
     }
 }
 
-void CreateAFile(char CurrentDir[],char OpenedDir[]) {
+void CreateAFile() {
     char File[20];
     char Touch[30] = "touch ";
     printf("The name of the file: ");
@@ -72,10 +72,10 @@ void CreateAFile(char CurrentDir[],char OpenedDir[]) {
     strcat(Touch, File);
     printf("%s\n", Touch);
     system(Touch);
-    ScanUserInput(CurrentDir,OpenedDir);
+    ScanUserInput();
 }
 
-void nano(char CurrentDir[],char OpenedDir[]) {
+void nano() {
     char File[20];
     char nano[30] = "nano ";
     printf("File to open/create with nano: ");
@@ -84,10 +84,10 @@ void nano(char CurrentDir[],char OpenedDir[]) {
     strcat(nano, "/");
     strcat(nano, File);
     system(nano);
-    ScanUserInput(CurrentDir,OpenedDir);
+    ScanUserInput();
 }
 
-void vim(char CurrentDir[],char OpenedDir[]) {
+void vim() {
     char File[20];
     char vim[30] = "vim ";
     printf("File to open/create with vim: ");
@@ -96,10 +96,10 @@ void vim(char CurrentDir[],char OpenedDir[]) {
     strcat(vim, "/");
     strcat(vim, File);
     system(vim);
-    ScanUserInput(CurrentDir,OpenedDir);
+    ScanUserInput();
 }
 
-void Execute(char CurrentDir[],char OpenedDir[]) {
+void Execute() {
     char File[20];
     char Execute[30] = "./";
     printf("File to execute: ");
@@ -108,7 +108,7 @@ void Execute(char CurrentDir[],char OpenedDir[]) {
     strcat(Execute, " > /dev/null & disown");
     chdir(CurrentDir);
     system(Execute);
-    ScanUserInput(CurrentDir,OpenedDir);
+    ScanUserInput();
 }
 
 // THE MAIN function
@@ -122,23 +122,24 @@ int main (int argc, char* argv[]) {
     }
     dir = opendir(CurrentDir);
 
-    ReadDir(dir,entry);
+    ReadDir();
 
     do {
 
-    printf("[&createafile&; &nano/vim&; &exe&]\n");
+    printf("[&createafile&; &nano/vim&; &exe&, &exit&]\n");
 
-    ScanUserInput(CurrentDir,OpenedDir);
+    ScanUserInput();
 
     if (strcmp(OpenedDir, "&createafile&") == 0) {
-        CreateAFile(CurrentDir,OpenedDir);
+        CreateAFile();
     } else if (strcmp(CurrentDir, "&nano&") == 0) {
-        nano(CurrentDir,OpenedDir);
+        nano();
     } else if (strcmp(OpenedDir, "&vim&") == 0) {
-        vim(CurrentDir,OpenedDir);
+        vim();
     } else if (strcmp(OpenedDir, "&exe&") == 0) {
-        Execute(CurrentDir,OpenedDir);
-    }
+        Execute();
+    } else if (strcmp(OpenedDir, "&exit&") == 0)
+        break;
 
     if (strcmp(CurrentDir, "/") != 0) {
         strcat(CurrentDir, "/");
@@ -147,8 +148,9 @@ int main (int argc, char* argv[]) {
 
     dir = opendir(CurrentDir);
 
-    ReadUserDir(OpenedDir,CurrentDir,dir,entry);
+    ReadUserDir();
 
     } while(1);
+    closedir(dir);
     return 0; // Returns zero
 }
